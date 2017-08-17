@@ -9,6 +9,7 @@
 /*.iws
 /*.iml
 .classpath
+.settings
 .project
 .metadata
 
