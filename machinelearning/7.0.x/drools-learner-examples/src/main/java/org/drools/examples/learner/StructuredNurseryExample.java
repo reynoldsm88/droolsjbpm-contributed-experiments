@@ -3,9 +3,9 @@ package org.drools.examples.learner;
 import java.util.List;
 
 import org.drools.examples.learner.structured_nursery.Nursery;
+import org.drools.examples.learner.utils.ObjectFactory;
 import org.drools.learner.DecisionTree;
 import org.drools.learner.builder.DecisionTreeFactory;
-import org.drools.learner.tools.ObjectFactory;
 import org.drools.learner.tools.RulePrinter;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;

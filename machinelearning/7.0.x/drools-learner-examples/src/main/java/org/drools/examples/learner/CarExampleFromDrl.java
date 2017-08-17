@@ -2,7 +2,7 @@ package org.drools.examples.learner;
 
 import java.util.List;
 
-import org.drools.learner.tools.ObjectFactory;
+import org.drools.examples.learner.utils.ObjectFactory;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.utils.KieHelper;
