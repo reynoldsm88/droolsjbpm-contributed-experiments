@@ -8,6 +8,9 @@
 /*.ipr
 /*.iws
 /*.iml
+*/.classpath
+*./.project
+*./.metadata
 
 # Repository wide ignore mac DS_Store files
 .DS_Store
