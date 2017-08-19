@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.drools.core.spi.ReadAccessor;
 import org.drools.learner.builder.Learner.DataType;
-import org.drools.learner.builder.Learner.DomainAlgo;
 import org.drools.learner.tools.ClassStructure;
 import org.drools.learner.tools.ClassVisitor;
 import org.drools.learner.tools.FeatureNotSupported;
@@ -38,13 +37,13 @@ public class Schema {
         this.targets = new HashSet<String>();
     }
 
-    public static Schema createSchemaStructure(Class<?> clazz, DomainAlgo domainType,
-                                               DataType dataType) throws Exception {
+    public static Schema createSchemaStructure(Class<?> clazz,
+                                               DataType dataType) {
         Schema schema = new Schema(clazz);
         //�ClassFieldExtractorCache cache = ClassFieldExtractorCache.getInstance();
 
         // schema is modified
-        ClassVisitor visitor = new ClassVisitor(schema, domainType, dataType);
+        ClassVisitor visitor = new ClassVisitor(schema, dataType);
         visitor.visit();
 
         /*
@@ -52,10 +51,10 @@ public class Schema {
          * target specified 3- more than one target is specified
          */
         if (!visitor.isTargetFound()) {
-            throw new Exception("Target Not Found, please annotate the target field");
+            throw new RuntimeException("Target Not Found, please annotate the target field");
         } else if (schema.getTargets().size() > 1) {
             //System.out.println("More ");
-            throw new FeatureNotSupported("More than one target specified, feature not supported yet ");
+            throw new RuntimeException("More than one target specified, feature not supported yet ");
         }
         return schema;
     }

@@ -6,11 +6,11 @@ import java.util.List;
 import org.drools.learner.DecisionTree;
 import org.drools.learner.DecisionTreePruner;
 import org.drools.learner.Memory;
+import org.drools.learner.MemoryImpl;
 import org.drools.learner.Stats;
 import org.drools.learner.StatsPrinter;
 import org.drools.learner.builder.DecisionTreeBuilder.TreeAlgo;
 import org.drools.learner.builder.Learner.DataType;
-import org.drools.learner.builder.Learner.DomainAlgo;
 import org.drools.learner.eval.heuristic.Entropy;
 import org.drools.learner.eval.heuristic.GainRatio;
 import org.drools.learner.eval.heuristic.Heuristic;
@@ -150,18 +150,15 @@ public class DecisionTreeFactory {
         C45Learner        learner       = new C45Learner(h);
         SingleTreeBuilder singleBuilder = new SingleTreeBuilder();
 
-        String algoSuffices       = DecisionTreeFactory.getAlgoSuffices(learner.getDomainAlgo(), singleBuilder.getTreeAlgo());
+        String algoSuffices       = DecisionTreeFactory.getAlgoSuffices(singleBuilder.getTreeAlgo());
         String executionSignature = DecisionTreeFactory.getSignature(objClass, "", algoSuffices);
 
         /* create the memory */
-        Memory mem = Memory.createFromObjects(objects, objClass, learner.getDomainAlgo(), data);
-        //		mem.setTrainRatio(Util.DEFAULT_TRAINING_RATIO);
-        //		mem.setTestRatio(Util.DEFAULT_TESTING_RATIO);
-        mem.processTestSet();
+        Memory mem = Memory.createFromObjects(objects, objClass, data);
 
         for (StoppingCriterion sc : criteria) {
             if (sc instanceof MaximumDepth) {
-                int maxDepth = (int) ((mem.getClassInstances().getSchema().getAttrNames().size() - 1) * 0.70);
+                int maxDepth = (int) ((mem.getInstances().getSchema().getAttrNames().size() - 1) * 0.70);
                 ((MaximumDepth) sc).setDepth(maxDepth);
             }
             learner.addStoppingCriteria(sc);
@@ -249,18 +246,15 @@ public class DecisionTreeFactory {
         C45Learner    learner = new C45Learner(h);
         ForestBuilder forest  = new ForestBuilder();
 
-        String algoSuffices       = DecisionTreeFactory.getAlgoSuffices(learner.getDomainAlgo(), forest.getTreeAlgo());
+        String algoSuffices       = DecisionTreeFactory.getAlgoSuffices(forest.getTreeAlgo());
         String executionSignature = DecisionTreeFactory.getSignature(objClass, "", algoSuffices);
 
         /* create the memory */
-        Memory mem = Memory.createFromObjects(objects, objClass, learner.getDomainAlgo(), data);
-        mem.setTrainRatio(Util.DEFAULT_TRAINING_RATIO);
-        mem.setTestRatio(Util.DEFAULT_TESTING_RATIO);
-        mem.processTestSet();
+        Memory mem = Memory.createFromObjects(objects, objClass, data);
 
         for (StoppingCriterion sc : criteria) {
             if (sc instanceof MaximumDepth) {
-                int maxDepth = (int) ((mem.getClassInstances().getSchema().getAttrNames().size() - 1) * 0.70);
+                int maxDepth = (int) ((mem.getInstances().getSchema().getAttrNames().size() - 1) * 0.70);
                 ((MaximumDepth) sc).setDepth(maxDepth);
             }
             learner.addStoppingCriteria(sc);
@@ -367,18 +361,15 @@ public class DecisionTreeFactory {
         C45Learner      learner       = new C45Learner(h);
         AdaBoostBuilder boostedForest = new AdaBoostBuilder();
 
-        String algoSuffices       = DecisionTreeFactory.getAlgoSuffices(learner.getDomainAlgo(), boostedForest.getTreeAlgo());
+        String algoSuffices       = DecisionTreeFactory.getAlgoSuffices(boostedForest.getTreeAlgo());
         String executionSignature = DecisionTreeFactory.getSignature(objClass, "", algoSuffices);
 
         /* create the memory */
-        Memory mem = Memory.createFromObjects(objects, objClass, learner.getDomainAlgo(), data);
-        mem.setTrainRatio(Util.DEFAULT_TRAINING_RATIO);
-        mem.setTestRatio(Util.DEFAULT_TESTING_RATIO);
-        mem.processTestSet();
+        Memory mem = Memory.createFromObjects(objects, objClass, data);
 
         for (StoppingCriterion sc : criteria) {
             if (sc instanceof MaximumDepth) {
-                int maxDepth = (int) ((mem.getClassInstances().getSchema().getAttrNames().size() - 1) * 0.70);
+                int maxDepth = (int) ((mem.getInstances().getSchema().getAttrNames().size() - 1) * 0.70);
                 ((MaximumDepth) sc).setDepth(maxDepth);
             }
             learner.addStoppingCriteria(sc);
@@ -436,18 +427,8 @@ public class DecisionTreeFactory {
         return executionSignature;
     }
 
-    public static String getAlgoSuffices(DomainAlgo domainA, TreeAlgo treeA) {
-        String suffix = "";
-        switch (domainA) {
-            case CATEGORICAL:
-                suffix += "id3";
-                break;
-            case QUANTITATIVE:
-                suffix += "c45";
-                break;
-            default:
-                suffix += "?";
-        }
+    public static String getAlgoSuffices(TreeAlgo treeA) {
+        String suffix = "c45";
 
         switch (treeA) {
             case SINGLE:
