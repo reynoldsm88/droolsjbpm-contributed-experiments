@@ -1,6 +1,5 @@
 package org.drools.examples.learner.refactored;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.drools.examples.learner.Car;
@@ -17,7 +16,7 @@ public class CarExampleRefactored {
     public static void main( String... args ) throws Exception {
 
         String inputFile = System.getProperty( "user.dir" ) + "/src/main/resources/data/car/car.data.csv";
-        List<Car> cars = new CsvFileReader<Car>().readObjects( inputFile, csv -> {
+        List<Object> cars = CsvFileReader.readObjects( inputFile, csv -> {
             Car car = new Car();
             car.setBuying( csv.get( "buying" ).trim() );
             car.setMaint( csv.get( "maint" ).trim() );
@@ -30,12 +29,12 @@ public class CarExampleRefactored {
         } );
 
         DroolsLearnerExample carExample = new DroolsLearnerExample( DroolsLearnerExample.SINGLE_C45E );
-        carExample.runTraningExample( Car.class, new ArrayList<Object>( cars ) );
+        carExample.runTraningExample( Car.class, cars );
 
         if ( PRINT_DRL ) {
             System.out.println( carExample.getDrl() );
         }
 
-        carExample.runGeneratedRules( new ArrayList<Object>( cars ) );
+        carExample.runGeneratedRules( cars );
     }
 }

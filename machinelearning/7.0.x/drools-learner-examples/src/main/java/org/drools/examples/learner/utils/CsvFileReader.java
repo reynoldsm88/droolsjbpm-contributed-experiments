@@ -11,10 +11,10 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-public class CsvFileReader<T> {
+public class CsvFileReader {
 
-    public List<T> readObjects( String filename, Function<CSVRecord, T> mapper ) throws IOException {
-        List<T> objects = new ArrayList<>();
+    public static List<Object> readObjects( String filename, Function<CSVRecord, Object> mapper ) throws IOException {
+        List<Object> objects = new ArrayList<>();
         Reader in = new FileReader( filename );
         CSVParser parser = CSVFormat.EXCEL.withHeader().parse( in );
         parser.forEach( record -> objects.add( mapper.apply( record ) ) );
