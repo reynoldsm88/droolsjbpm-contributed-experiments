@@ -98,6 +98,7 @@ public class CarExample {
         }
 
         String     drl      = RulePrinter.readRules(decision_tree);
+        System.out.println( drl );
         KieSession ksession = new KieHelper().addContent(drl, ResourceType.DRL).build().newKieSession();
         ksession.fireAllRules();
 
